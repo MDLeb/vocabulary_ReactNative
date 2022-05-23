@@ -4,6 +4,8 @@ import { WordsContext } from '../../App';
 import {Text, View, TextInput, SafeAreaView, FlatList} from 'react-native';
 import { Button } from 'react-native-web';
 import WordItem from '../components/word';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 export default function Library() {
     // return (
@@ -108,7 +110,12 @@ export default function Library() {
                 <TextInput placeholder='Write your word here...' onChangeText={setInputValue} value={inputValue}></TextInput>
                 <Button title="Add word" onPress={async () => {
                     let word = await add();
-                    (setWordsArray([...wordsArray, word]));
+                    wordsArray.push(word);
+                    setWordsArray(wordsArray);
+                    console.log(wordsArray)
+                    await AsyncStorage.clear()
+                    .then(AsyncStorage.setItem('words', JSON.stringify(wordsArray)))
+                    .then(AsyncStorage.getItem('words').then(res => console.log(JSON.parse(res))))
                 }}/>
               </View>
               <View>

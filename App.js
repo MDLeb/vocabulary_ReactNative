@@ -14,17 +14,16 @@ const Drawer = createDrawerNavigator();
 
 const App = () => {
 
-
   const [wordsArray, setWordsArray] = useState([]);
-  let startWordArr = async () => {
-      return await AsyncStorage.getItem('words').then(res => res.JSON)
-  };                         
+  
+  let checkStorage = async() => {
+    return await AsyncStorage.getItem('words').then(res => JSON.parse(res));
+  }
 
-  (async() => {
-    //await AsyncStorage.clear();
-    if(await startWordArr())
-      setWordsArray(await startWordArr());  
-  })();
+  useEffect(() => {
+    checkStorage().then(setWordsArray);
+   }, []);
+   
   // const [score, setScore] = useState((async () => {await AsyncStorage.getItem('score')}) ?
   //                                                 (async () => {await AsyncStorage.getItem('score')}) :
   //                                                 0);
@@ -33,15 +32,16 @@ const App = () => {
 
   // if(level > 0 && score >= (level+1)*50) setLevel(level+1);
 
-  useEffect(async () => {
-    await AsyncStorage.clear();//разобраться с контекстом и менять в локал сторэдж только при выходе
-    await AsyncStorage.setItem(`words`, JSON.stringify(wordsArray));
-    // await AsyncStorage.setItem(`score`, score);
-    // if(level == 0 && score >= 50)
-    //   setLevel(1);
-    // if(level > 0 && score >= level*50)
-    //   setLevel(level+1);
-  }, [wordsArray, score]);
+  // useEffect(async () => {
+  //   await AsyncStorage.clear();
+  //   await AsyncStorage.setItem(`words`, JSON.stringify(wordsArray));
+  //   await AsyncStorage.getItem('words').then(res => console.log(res.JSON));
+  //   // await AsyncStorage.setItem(`score`, score);
+  //   // if(level == 0 && score >= 50)
+  //   //   setLevel(1);
+  //   // if(level > 0 && score >= level*50)
+  //   //   setLevel(level+1);
+  // }, [wordsArray]);
 
   return (
     <WordsContext.Provider value={[[wordsArray, setWordsArray], [score, setScore]]} >

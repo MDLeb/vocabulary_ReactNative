@@ -3,7 +3,7 @@ import { WordsContext } from '../../App';
 import { View, Text } from 'react-native';
 
 const WordItem = ({word}) => {
-console.log({word});
+//console.log({word});
   return (
       
     <View>
